@@ -1,11 +1,17 @@
-package com.yyd.autocheckin;
+package com.yyd.autocheckin.cron;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class autoCheckIn {
-    public static void main(String[] args) throws IOException, InterruptedException {
+@Component
+public class AutoCheckInTask {
+
+    @Scheduled(fixedRate = 1000)
+    public void call() throws IOException, InterruptedException {
 
         List<String> adbCommands = new ArrayList<>();
 
@@ -51,7 +57,7 @@ public class autoCheckIn {
 
     }
 
-    private static Process exec(String command, long mills) throws IOException {
+    private Process exec(String command, long mills) throws IOException {
         Process process = Runtime.getRuntime().exec(command);;
         try(BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
@@ -69,7 +75,7 @@ public class autoCheckIn {
         return process;
     }
 
-    private static void execFromList(List<String> commands, long mills) throws IOException {
+    private void execFromList(List<String> commands, long mills) throws IOException {
         for (String command : commands){
             Process process;
             process = exec(command, mills);
@@ -77,7 +83,7 @@ public class autoCheckIn {
 
         }
     }
-    private static void execFromFile(String path){
+    private void execFromFile(String path){
         try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path)));) {
             String line = null;
             while((line = br.readLine()) != null){
@@ -89,8 +95,5 @@ public class autoCheckIn {
             e.printStackTrace();
         }
     }
-
-
-
 
 }
