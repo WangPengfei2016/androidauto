@@ -6,12 +6,16 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Component
-public class AutoCheckInTask {
+public class AutoCheckInMorningTask {
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(cron = "0 45 8 * * ? ")
     public void call() throws IOException, InterruptedException {
+
+        Random random = new Random();
+        Thread.sleep(random.nextInt(60000));
 
         List<String> adbCommands = new ArrayList<>();
 
